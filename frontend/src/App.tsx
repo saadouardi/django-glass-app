@@ -50,7 +50,7 @@ function App() {
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setFilteredImages(imageState.images); // If no search term, reset to original images
+      setFilteredImages(imageState.images);
     } else {
       setFilteredImages(
         imageState.images.filter((image) =>
@@ -59,7 +59,14 @@ function App() {
       );
       setCurrentPage(1);
     }
-  }, [searchTerm, imageState.images]);
+  
+    // Close the modal if the current image is no longer part of the filtered images
+    if (currentImage && !filteredImages.find(image => image.id === currentImage.id)) {
+      setIsModalOpen(false);
+    }
+  
+  }, [searchTerm, imageState.images, currentImage, filteredImages]);
+  
 
   // When a new image is clicked, update the form state
   useEffect(() => {
@@ -123,7 +130,7 @@ function App() {
       // Update image in state
       imageStateDispatch({ type: "SetImages", payload: imageState.images.map(img => img.id === updatedImage.id ? updatedImage : img) });
       // Close modal
-      setIsModalOpen(false); // Close the modal after saving
+      setIsModalOpen(false);
     } else {
       console.error("Failed to save changes");
     }
@@ -172,7 +179,7 @@ function App() {
               </PharosImageCard>
             ))
           ) : (
-            <div>No images found matching your search term.</div>
+            <div className="text-warning">No images found matching your search term.</div>
           )}
         </div>
 
@@ -270,7 +277,7 @@ function App() {
               slot="footer"
               type="button"
               variant="secondary"
-              onClick={() => setIsModalOpen(false)} // Close modal on cancel
+              onClick={() => setIsModalOpen(false)}
             >
               Cancel
             </PharosButton>
