@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools >= 65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backend"
+version = "0.0.1"
+dependencies = ["fastapi[all]==0.109.1"]
+requires-python = ">=3.10"
