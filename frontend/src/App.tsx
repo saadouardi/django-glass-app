@@ -107,7 +107,8 @@ function App() {
       id: currentImage.id,
       title: updatedTitle,
       description: updatedDescription,
-      ispublic: updatedIsPublic ? 1 : 0
+      ispublic: updatedIsPublic ? 1 : 0,
+      url_m_cdn: currentImage.url_m_cdn
     };
 
     const response = await fetch(`http://localhost:9000/update/${currentImage.id}`, {
