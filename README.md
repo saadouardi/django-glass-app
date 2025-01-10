@@ -40,6 +40,7 @@ $ python --version
 $ python -m venv .venv
 $ source .venv/bin/activate
 (.venv)$ python -m pip install .
+$ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
 ##### Running the application

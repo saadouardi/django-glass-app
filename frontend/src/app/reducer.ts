@@ -74,6 +74,7 @@ export const initialState: ImageState = {
   currentImageId: undefined,
 };
 
+
 export const ImageReducer = (state = initialState, action: any): ImageState => {
   switch (action.type) {
     case "SetImages":
