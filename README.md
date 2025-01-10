@@ -50,3 +50,7 @@ This project uses uvicorn to run the FastAPI application. You can run the applic
 ```shell
 (.venv)$ uvicorn main:app --host 0.0.0.0 --port 9000 --reload
 ```
+
+``` to test:
+    - pip install pytest requests
+    - pytest .\tests\test_api.py

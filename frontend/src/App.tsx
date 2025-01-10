@@ -1,5 +1,3 @@
-// Frontend is now cleaner because filtering, pagination, and updating logic have been moved to the backend.
-
 import React, { useReducer, useEffect, useState } from "react";
 import {
   PharosButton,
@@ -31,7 +29,7 @@ function App() {
       const data = await fetchImageData(searchTerm, currentPage, 10);
       if (data.images && data.total) {
         imageStateDispatch({ type: "SetImages", payload: data.images });
-        setTotalPages(Math.ceil(data.total / 10)); // Ensure this calculation is based on the total number of items, not just those returned
+        setTotalPages(Math.ceil(data.total / 10));
       }
     };
     fetchData();
@@ -78,7 +76,7 @@ function App() {
       console.error("Failed to save changes");
     }
   };
-  // Modal handlers remain unchanged
+  
   const currentImage = imageState.images.find(
     (image) => image.id === imageState.currentImageId
   );
@@ -95,6 +93,7 @@ function App() {
     <ImagesContext.Provider value={{ imageState, imageStateDispatch }}>
       <div className="image-gallery">
         <h1 className="image-gallery__heading text-primary">Image Gallery</h1>
+        
         <div className="search d-flex align-items-center justify-content-center gap-2">
           <input
             type="text"
@@ -107,6 +106,7 @@ function App() {
             Clear
           </button>
         </div>
+
         <div className="image-grid">
           {imageState.images.length ? (
             imageState.images.map((image) => (
@@ -120,8 +120,13 @@ function App() {
                   slot="image"
                   src={image.url_m_cdn || DefaultImage}
                   alt={`An image titled "${image.title}"`}
+                  className="gallery-image"
                   onError={(e) => (e.currentTarget.src = DefaultImage)}
                 />
+                <div slot="metadata">
+                  {image.description.length > 0 ? image.description.length > 16 ? 'Description: ' + image.description.slice(0, 16) + '...' : 'Description: ' + image.description
+                  : (<div className="text-danger">No description available</div>)}
+                </div>
                 <div slot="metadata">By {image.ownername}</div>
               </PharosImageCard>
             ))
@@ -131,6 +136,7 @@ function App() {
             </div>
           )}
         </div>
+
         <div className="pagination-controls d-flex align-items-center justify-content-center gap-2">
           <button
             disabled={currentPage === 1}
@@ -150,6 +156,7 @@ function App() {
             Next
           </button>
         </div>
+        
         {currentImage && (
           <PharosModal
             id="image-modal"

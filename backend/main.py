@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Query, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, Query, HTTPException # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from sqlite3 import connect
 
 app = FastAPI()
@@ -18,7 +18,16 @@ async def read_root(
     search: str = Query(default=None), page: int = Query(default=1), page_size: int = Query(default=10)
 ):
     """
-    Fetch paginated data with optional search filtering.
+    Fetch paginated data with optional search filtering from the database.
+
+    Parameters:
+    - search (str): Optional. A search string to filter images by title or description.
+    - page (int): Optional. The current page number in pagination.
+    - page_size (int): Optional. The number of records to return per page.
+
+    Returns:
+    - dict: A dictionary with two keys: 'images' which is a list of dictionaries containing image data,
+            and 'total' which is an integer representing the total number of images that match the search criteria.
     """
     try:
         conn = connect("image_data.db")
@@ -69,91 +78,11 @@ async def update_image(image_id: str, image: dict):
     conn.commit()
     return {"message": "Image updated successfully"}
 
-
-# from sqlite3 import connect
-# from fastapi import Query, FastAPI, HTTPException # type: ignore
-# from fastapi.middleware.cors import CORSMiddleware # type: ignore
-
-
-# app = FastAPI()
-# origins = [
-#     "http://localhost:5173",
-#     "http://localhost:8000"
-# ]
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-
-# def dict_factory(cursor, row):
-#     fields = [column[0] for column in cursor.description]
-#     return {key: value for key, value in zip(fields, row)}
-
-# @app.get("/data")
-# def read_root(search: str = Query(None)):
-#     conn = connect("image_data.db")
-#     conn.row_factory = dict_factory
-#     cur = conn.cursor()
-#     if search:
-#         query = """
-#         SELECT * FROM image_data
-#         WHERE title LIKE :search OR description LIKE :search
-#         """
-#         result = cur.execute(query, {'search': f'%{search}%'})
-#     else:
-#         result = cur.execute("SELECT * FROM image_data")
-#     return result.fetchall()
-
-# @app.get("/data")
-# def read_root(search: str = Query(None), page: int = Query(1), page_size: int = Query(10)):
-#     conn = connect("image_data.db")
-#     conn.row_factory = dict_factory
-#     cur = conn.cursor()
-#     offset = (page - 1) * page_size
-#     if search:
-#         query = """
-#         SELECT * FROM image_data
-#         WHERE title LIKE :search OR description LIKE :search
-#         LIMIT :page_size OFFSET :offset
-#         """
-#         result = cur.execute(query, {'search': f'%{search}%', 'page_size': page_size, 'offset': offset})
-#     else:
-#         result = cur.execute("SELECT * FROM image_data LIMIT ? OFFSET ?", (page_size, offset))
-#     return result.fetchall()
-
-# @app.put("/update/{image_id}")
-# def update_image(image_id: str, image: dict):
-#     conn = connect("image_data.db")
-#     try:
-#         cur = conn.cursor()
-#         # Update image data
-#         cur.execute("""
-#             UPDATE image_data
-#             SET title = ?, description = ?, ispublic = ?
-#             WHERE id = ?
-#         """, (image["title"], image["description"], image["ispublic"], image_id))
-        
-#         if cur.rowcount == 0:
-#             raise HTTPException(status_code=404, detail="Image not found")
-        
-#         conn.commit()
-#         return {"message": "Image updated successfully"}
-#     except Exception as e:
-#         conn.rollback()
-#         raise HTTPException(status_code=500, detail=str(e))
-
-
-# # move search and filtering to the backend
-# # move pagination logic to the backend
-# # add error handling for the backend
-# # minimize the code used in the frontend
-# # add unit tests using pytest (test / integration tests)
-# # add integration test using pytest (library in python) and requests (library in python) (in big projects) 
-# # add unit test comments: giving when then
-# # add function comments()
-# # error handling
+# move search and filtering to the backend ✅
+# move pagination logic to the backend ✅
+# add error handling for the backend ✅
+# minimize the code used in the frontend ✅
+# add unit tests using pytest (test / integration tests) ✅
+# add integration test using pytest (library in python) and requests (library in python) (in big projects) ✅
+# add unit test comments: giving when then ✅
+# add function comments() ✅
