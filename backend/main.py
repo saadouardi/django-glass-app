@@ -14,28 +14,42 @@ def dict_factory(cursor, row):
     return d
 
 @app.get("/data")
-async def read_root(search: str = Query(default=None), page: int = Query(default=1), page_size: int = Query(default=10)):
+async def read_root(
+    search: str = Query(default=None), page: int = Query(default=1), page_size: int = Query(default=10)
+):
     """
-    Retrieve paginated list of images with optional search.
-    - **search**: Query string to filter images by title or description
-    - **page**: Integer page number
-    - **page_size**: Integer number of items per page
+    Fetch paginated data with optional search filtering.
     """
-    conn = connect("image_data.db")
-    conn.row_factory = dict_factory
-    cur = conn.cursor()
-    offset = (page - 1) * page_size
-    query = "SELECT * FROM image_data "
-    if search:
-        query += "WHERE title LIKE ? OR description LIKE ? "
-        params = [f'%{search}%', f'%{search}%']
-    else:
+    try:
+        conn = connect("image_data.db")
+        conn.row_factory = dict_factory
+        cur = conn.cursor()
+
+        # Query for total count
+        if search:
+            total_query = "SELECT COUNT(*) as total FROM image_data WHERE title LIKE ? OR description LIKE ?"
+            total_result = cur.execute(total_query, [f"%{search}%", f"%{search}%"]).fetchone()
+        else:
+            total_query = "SELECT COUNT(*) as total FROM image_data"
+            total_result = cur.execute(total_query).fetchone()
+
+        total = total_result["total"]
+
+        # Query for paginated results
+        query = "SELECT * FROM image_data "
         params = []
-    query += "LIMIT ? OFFSET ?"
-    params.extend([page_size, offset])
-    result = cur.execute(query, params)
-    images = result.fetchall()
-    return {"images": images, "total": len(images)}
+        if search:
+            query += "WHERE title LIKE ? OR description LIKE ? "
+            params = [f"%{search}%", f"%{search}%"]
+        query += "LIMIT ? OFFSET ?"
+        params.extend([page_size, (page - 1) * page_size])
+        cur.execute(query, params)
+
+        images = cur.fetchall()
+        return {"images": images, "total": total}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+
 
 @app.put("/update/{image_id}")
 async def update_image(image_id: str, image: dict):
