@@ -36,6 +36,7 @@ def get_images(search=None, page=1, page_size=10):
         cur.execute(query, params)
 
         images = cur.fetchall()
+        print(f"DEBUG: Queried {len(images)} images from database")  # ✅ Debugging
         logger.info(f"✅ Fetched {len(images)} images | Search: {search} | Page: {page}")
         return {"images": images, "total": total}
 
@@ -44,7 +45,9 @@ def get_images(search=None, page=1, page_size=10):
         return {"error": str(e)}
 
 def update_image(image_id, image):
-    """Update an image's title, description, and public status."""
+    """
+    Update an image's title, description, and public status.
+    """
     try:
         conn = connect("image_data.db")
         cur = conn.cursor()
@@ -53,7 +56,7 @@ def update_image(image_id, image):
             (image["title"], image["description"], image["ispublic"], image_id),
         )
 
-        if cur.rowcount == 0:
+        if cur.rowcount == 0:  # ✅ Return proper error if image not found
             return {"error": "Image not found"}
 
         conn.commit()

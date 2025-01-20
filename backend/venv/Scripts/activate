@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Admin\Desktop\PERSO\Perso 2\programming\coding\github\glass-app\venv"
+VIRTUAL_ENV="C:\Users\Admin\Desktop\PERSO\Perso 2\programming\coding\github\glass-app\backend\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
