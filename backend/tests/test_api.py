@@ -1,11 +1,11 @@
 import requests # type: ignore
+from unittest.mock import MagicMock
+# @pytest.fixture
+# def client():
+#     return MagicMock()
 
-def test_fetch_data():
-    # Given: An endpoint URL
-    url = "http://localhost:9000/data"
-    
-    # When: Sending a GET request to the endpoint
-    response = requests.get(url)
+def test_fetch_data(client):
+    response = client.get("/data", params={"searchQuery": "test", "page": 1, "pageSize": 10})
     
     # Then: The response should have a status code of 200
     assert response.status_code == 200
