@@ -16,7 +16,7 @@ First, clone this repository.
 Change to the `frontend/` directory of the cloned repository. Then, install the dependencies using the following command:
 
 ```shell
-$ npm install
+$npm install
 ```
 
 ##### Running the application
@@ -24,7 +24,7 @@ $ npm install
 This application uses Vite for fast building and hot module reloading. You can run the application using the following command:
 
 ```shell
-$ npm run dev
+$npm run dev
 ```
 
 #### Backend
@@ -43,7 +43,7 @@ $ source .venv/bin/activate
 $ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
-##### Running the application
+#### Running the application for backend
 
 This project uses uvicorn to run the FastAPI application. You can run the application using the following command:
 
@@ -54,3 +54,7 @@ This project uses uvicorn to run the FastAPI application. You can run the applic
 ``` to test:
     - pip install pytest requests
     - pytest .\tests\test_api.py
+
+### Questions
+- what is Swagger UI
+
