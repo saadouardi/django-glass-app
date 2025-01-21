@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Query, HTTPException, Depends, status # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from services import authenticate_user, create_access_token
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm # type: ignore
+from fastapi.params import Body # type: ignore
 from datetime import timedelta
-from jose import JWTError, jwt
+from jose import JWTError, jwt # type: ignore
 import logging
-from services import get_images, update_image  # ✅ Import services
+from services.auth import authenticate_user, create_access_token
+from services.images import get_images, update_image  # ✅ Import services
 
 app = FastAPI()
 
@@ -66,6 +67,13 @@ async def read_images(
         raise HTTPException(status_code=500, detail=result["error"])
     
     return result
+
+# create a post API in order to post images:
+@app.post("/create-upload")
+def create_upload(payload: dict = Body(...)):
+    print(payload)
+    return {f"title: {payload['title']}, description: {payload['description']}"}
+
 
 @app.put("/update/{image_id}")
 async def modify_image(image_id: str, image: dict):
