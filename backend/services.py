@@ -58,7 +58,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def get_images(search=None, page=1, page_size=10):
+def get_images(search=None, page=1, page_size=10, username: dict = None):
     """Fetch paginated image data with optional search."""
     try:
         conn = connect("image_data.db")

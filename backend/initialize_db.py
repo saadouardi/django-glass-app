@@ -15,3 +15,21 @@ for user in users:
 
 # Close connection
 conn.close()
+
+# Connect to the database (creates if not exists)
+conn = sqlite3.connect("image_data.db")
+cursor = conn.cursor()
+
+# Create the users table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+""")
+
+conn.commit()
+conn.close()
+
+print("✅ Users table created successfully!")

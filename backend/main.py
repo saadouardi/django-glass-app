@@ -56,7 +56,7 @@ async def protected_route(username: str = Depends(get_current_user)):
 
 @app.get("/data")
 async def read_images(
-    search: str = Query(default=None), page: int = Query(default=1), page_size: int = Query(default=10)
+    search: str = Query(default=None), page: int = Query(default=1), page_size: int = Query(default=10), username: str = Depends(get_current_user)
 ):
     """API Route to fetch images with pagination and search."""
     logger.info(f"📌 GET /data - Search: {search} | Page: {page} | Page Size: {page_size}")
