@@ -1,7 +1,22 @@
 import logging
 from sqlite3 import connect
+from datetime import datetime, timedelta
+from passlib.context import CryptContext
+from jose import jwt, JWTError
 
 # Configure logging
+logger = logging.getLogger(__name__)
+
+
+
+# Secret key and algorithm for JWT
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 logger = logging.getLogger(__name__)
 
 def dict_factory(cursor, row):
@@ -10,6 +25,38 @@ def dict_factory(cursor, row):
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
+
+# 🔹 Hash password
+def hash_password(password: str):
+    return pwd_context.hash(password)
+
+# 🔹 Verify password
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+# 🔹 Authenticate user
+def authenticate_user(username: str, password: str):
+    conn = connect("image_data.db")
+    conn.row_factory = dict_factory
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+    user = cur.fetchone()
+
+    if not user or not verify_password(password, user["password"]):
+        return None  # ❌ Authentication failed
+
+    return user  # ✅ Authentication successful
+
+# 🔹 Create JWT token
+def create_access_token(data: dict, expires_delta: timedelta = None):
+    to_encode = data.copy()
+
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
 
 def get_images(search=None, page=1, page_size=10):
     """Fetch paginated image data with optional search."""

@@ -3,9 +3,9 @@ from unittest.mock import patch, MagicMock
 from backend.services import get_images, update_image
 
 @pytest.fixture
-def mock_db():
+def mock_db(): # This ensures that we don’t modify the actual database when testing. and It allows us to control the return values of database queries inside tests.
     """Mock database connection and cursor."""
-    with patch("backend.services.connect") as mock_connect:
+    with patch("backend.services.connect") as mock_connect: #Mocks the database connection (sqlite3.connect), so the actual database is never touched.
         mock_conn = MagicMock()
         mock_cursor = MagicMock()
 

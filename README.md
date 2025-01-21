@@ -47,14 +47,31 @@ $ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 This project uses uvicorn to run the FastAPI application. You can run the application using the following command:
 
-```shell
-(.venv)$ uvicorn main:app --host 0.0.0.0 --port 9000 --reload
-```
+### shell
 
-``` to test:
-    - pip install pytest requests
-    - pytest .\tests\test_api.py
+(.venv)$ uvicorn main:app --host 0.0.0.0 --port 9000 --reload
+
+### commands
+
+$pip install pytest requests
+$pytest .\tests\test_api.py $to test
+$pip install -r requirements.txt
 
 ### Questions
-- what is Swagger UI
 
+- what is Swagger UI: http://127.0.0.1:9000/docs
+- using Django or FastAPI as a backend it could be connected to a frontend without using templates? it could be connected to both?
+- how to create requirements file and download all the dependencies inside it?
+- while installing dependencies, should i be in env mode or not? or it doesn't matter
+
+#### Info
+
+#### from unittest.mock import patch
+
+- is used to mock database connections so we don't need a real database for testing
+
+## TO DO
+
+- create an APP without searching or googling it(models, views, etc)
+- create tests for each file
+- connect the backend with the frontend

@@ -1,5 +1,9 @@
-from fastapi import FastAPI, Query, HTTPException # type: ignore
+from fastapi import FastAPI, Query, HTTPException, Depends, status # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from services import authenticate_user, create_access_token
+from datetime import timedelta
+from jose import JWTError, jwt
 import logging
 from services import get_images, update_image  # ✅ Import services
 
@@ -12,6 +16,43 @@ app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
+# OAuth2 Scheme
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# Secret key and algorithm for JWT
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+
+@app.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    """Login endpoint to generate access token."""
+    user = authenticate_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    access_token = create_access_token({"sub": user["username"]}, expires_delta=timedelta(minutes=30))
+    return {"access_token": access_token, "token_type": "bearer"}
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    """Decode JWT token to get current user."""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        return username
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+@app.get("/protected")
+async def protected_route(username: str = Depends(get_current_user)):
+    """A protected route that requires authentication."""
+    return {"message": f"Welcome {username}!"}
 
 @app.get("/data")
 async def read_images(
