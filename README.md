@@ -70,6 +70,10 @@ $pip install -r requirements.txt
 
 - is used to mock database connections so we don't need a real database for testing
 
+### to run specefic tests
+
+$pytest .\tests\test_services.py::test_update_image_not_found
+
 ## TO DO
 
 - create an APP without searching or googling it(models, views, etc)

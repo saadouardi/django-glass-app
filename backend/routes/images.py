@@ -9,7 +9,7 @@ async def read_images(
     search: str = Query(default=None), 
     page: int = Query(default=1), 
     page_size: int = Query(default=10), 
-    username: str = Depends(get_current_user)
+    username: str = Depends(get_current_user) # to update to the ID
 ):
     """Fetch images with pagination and search."""
     result = get_images(search, page, page_size)
