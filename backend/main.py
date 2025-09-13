@@ -10,7 +10,7 @@ app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True
 
 # Include routers
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
-app.include_router(images.router, prefix="/images", tags=["Images"])
+app.include_router(images.router, prefix="/data", tags=["Images"])
 app.include_router(protected.router, prefix="/protected", tags=["Protected"])
 
 @app.get("/")

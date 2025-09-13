@@ -40,16 +40,16 @@ Example:
    # Verifying a signature for a hash value:
 
    if pubkey.verifies( hash, signature ):
-     print_("Demo verification succeeded.")
+     print("Demo verification succeeded.")
    else:
-     print_("*** Demo verification failed.")
+     print("*** Demo verification failed.")
 
    # Verification fails if the hash value is modified:
 
    if pubkey.verifies( hash-1, signature ):
-     print_("**** Demo verification failed to reject tampered hash.")
+     print("**** Demo verification failed to reject tampered hash.")
    else:
-     print_("Demo verification correctly rejected tampered hash.")
+     print("Demo verification correctly rejected tampered hash.")
 
 Revision history:
       2005.12.31 - Initial version.
@@ -275,7 +275,7 @@ def int_to_string(x):  # pragma: no cover
     # deprecated in 0.19
     warnings.warn(
         "Function is unused in library code. If you use this code, "
-        "change to util.string_to_number.",
+        "change to util.number_to_string.",
         DeprecationWarning,
     )
     assert x >= 0
@@ -296,7 +296,7 @@ def string_to_int(s):  # pragma: no cover
     # deprecated in 0.19
     warnings.warn(
         "Function is unused in library code. If you use this code, "
-        "change to util.number_to_string.",
+        "change to util.string_to_number.",
         DeprecationWarning,
     )
     result = 0

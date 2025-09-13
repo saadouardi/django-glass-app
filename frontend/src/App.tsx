@@ -54,7 +54,7 @@ function App() {
     };
 
     const response = await fetch(
-      `http://localhost:9000/update/${currentImage.id}`,
+      `http://localhost:9000/data/${currentImage.id}`,
       {
         method: "PUT",
         headers: {
