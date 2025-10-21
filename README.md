@@ -70,8 +70,29 @@ $pip install -r requirements.txt
 
 - is used to mock database connections so we don't need a real database for testing
 
-## TO DO
+### to run specefic tests
+
+$pytest .\tests\test_services.py::test_update_image_not_found
+
+## TASKS
 
 - create an APP without searching or googling it(models, views, etc)
 - create tests for each file
 - connect the backend with the frontend
+1- Create a PR for each task (description: what are the tasks)
+2- WhatsApp message:
+Tasks done + PR link
+Tasks to be done tomorrow
+Blockers
+
+new repo [https://github.com/SaadOuardi/social-app]
+Tasks done on 1/22/2025 (Today):
+set up well organized folder for my web application + well structured code
+learn about 15% of the course from zero to hero
+
+Tasks for tomorrow
+study another 15% of the course + taking notes about each details
+fix tests on my app
+try all what i will learn on the video watched by setting up PR for each task
++repeat what we have done on the glass-app on the new social media app(tutorial video)
+every single task should has a PR instead of global push
