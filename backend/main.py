@@ -5,8 +5,15 @@ from routes import auth, images, protected  # Import routes
 app = FastAPI()
 
 # Configure CORS
-origins = ["http://localhost:5173", "http://localhost:8000"]
-app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+# origins = ["http://localhost:5173", "http://localhost:8000"]
+app.add_middleware(
+    CORSMiddleware, 
+    allow_origin_regex=r"https://.*\.vercel\.app", 
+    # allow_origins=origins, 
+    allow_credentials=True, 
+    allow_methods=["*"], 
+    allow_headers=["*"]
+)
 
 # Include routers
 app.include_router(auth.router, prefix="/auth", tags=["Auth"])
@@ -15,4 +22,4 @@ app.include_router(protected.router, prefix="/protected", tags=["Protected"])
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the FastAPI app!"}
+    return {"message": "Welcome to the app!"}
